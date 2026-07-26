@@ -1,0 +1,126 @@
+# Mini Mario Quiz - Guía de Instalación y Ejecución
+
+## Requisitos
+
+Antes de ejecutar el juego, asegúrate de tener instalado:
+
+* Visual Studio Code
+* Extensión Live Server para Visual Studio Code
+
+---
+
+## Instalación de Live Server
+
+1. Abrir Visual Studio Code.
+
+2. Ir a la sección de Extensiones (Extensions).
+
+3. Buscar:
+
+   ```
+   Live Server
+   ```
+
+4. Instalar la extensión desarrollada por Ritwick Dey.
+
+---
+
+## Abrir el Proyecto
+
+1. Descargar o clonar el proyecto.
+2. Abrir la carpeta del proyecto en Visual Studio Code.
+3. Verificar que existan los siguientes archivos:
+
+   ```
+   index.html
+   style.css
+   script.js
+   ```
+
+---
+
+## Ejecutar el Juego
+
+1. Abrir el archivo:
+
+   ```
+   index.html
+   ```
+
+2. Hacer clic derecho dentro del archivo.
+
+3. Seleccionar:
+
+   ```
+   Open with Live Server
+   ```
+
+4. El navegador se abrirá automáticamente mostrando el juego.
+
+---
+
+## Controles del Juego
+
+| Tecla   | Acción               |
+| ------- | -------------------- |
+| A       | Mover a la izquierda |
+| D       | Mover a la derecha   |
+| Espacio | Saltar               |
+
+---
+
+## Objetivo del Juego
+
+* Mover al personaje por las plataformas.
+* Recolectar las monedas amarillas que aparecen aleatoriamente.
+* Responder correctamente las preguntas para ganar puntos.
+* Cada respuesta correcta aumenta el puntaje.
+
+---
+
+## Solución de Problemas
+
+### El personaje no se mueve
+
+Verificar que la ventana del navegador tenga el foco activo y hacer clic dentro del juego antes de usar el teclado.
+
+### No aparece la moneda
+
+Recargar la página utilizando:
+
+```
+F5
+```
+
+### Live Server no aparece
+
+Verificar que la extensión Live Server esté instalada y habilitada en Visual Studio Code.
+
+---
+
+## Tecnologías Utilizadas
+
+* HTML5
+* CSS3
+* JavaScript Vanilla
+
+---
+
+## Autor
+
+Proyecto educativo desarrollado para practicar:
+
+* Manipulación del DOM
+* Eventos de teclado
+* Colisiones
+* Física básica
+* Generación aleatoria de objetos
+* Programación de videojuegos 2D con JavaScript
+
+
+
+
+A MEJORAR: 
+Cuadros responsive para tipo tipo de pantalla
+Agregar un timer
+Agregar banco de preguntas almacenado localmente, 12 preguntas con su respectiva respuesta. 
