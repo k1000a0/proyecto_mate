@@ -1,244 +1,722 @@
-// Obtener elementos del HTML para poder manipularlos desde JavaScript
-const player = document.getElementById("player");
-const platforms = document.querySelectorAll(".platform");
-const game = document.getElementById("game");
-const scoreDisplay = document.getElementById("score");
+// ======================================
+// ELEMENTOS
+// ======================================
 
-// Variables del juego
-let score = 0;      // Puntaje actual
-let coin = null;    // Moneda actual en pantalla
+const player =
+  document.getElementById("player");
 
-// Posición inicial del jugador
+const platforms =
+  document.querySelectorAll(".platform");
+
+const game =
+  document.getElementById("game");
+
+const scoreDisplay =
+  document.getElementById("score");
+
+
+// ======================================
+// BOTONES
+// ======================================
+
+const leftBtn =
+  document.getElementById("leftBtn");
+
+const rightBtn =
+  document.getElementById("rightBtn");
+
+const jumpBtn =
+  document.getElementById("jumpBtn");
+
+
+// ======================================
+// PREGUNTAS
+// ======================================
+
+const questionBox =
+  document.getElementById("questionBox");
+
+const questionText =
+  document.getElementById("questionText");
+
+const answerInput =
+  document.getElementById("answerInput");
+
+const answerBtn =
+  document.getElementById("answerBtn");
+
+
+// ======================================
+// CONFIGURACIÓN DEL MUNDO
+// ======================================
+
+// Estas son las dimensiones originales
+// de tu juego.
+
+const WORLD_WIDTH = 800;
+
+const WORLD_HEIGHT = 400;
+
+
+// ======================================
+// JUGADOR
+// ======================================
+
+const PLAYER_WIDTH = 40;
+
+const PLAYER_HEIGHT = 40;
+
+
+// ======================================
+// POSICIÓN
+// ======================================
+
 let x = 100;
+
 let y = 100;
 
-// Variables de física
-let velocityY = 0;  // Velocidad vertical
-let gravity = 0.5;  // Fuerza de gravedad
-let jumping = true; // Indica si el jugador está en el aire
 
-// Velocidad horizontal del jugador
+// ======================================
+// FÍSICA
+// ======================================
+
+let velocityY = 0;
+
+const gravity = 0.5;
+
+let jumping = true;
+
+
+// ======================================
+// VELOCIDAD
+// ======================================
+
 const speed = 5;
 
-// Tamaño del jugador
-const playerWidth = 40;
-const playerHeight = 40;
 
-// Objeto donde guardamos las teclas presionadas
-const keys = {};
+// ======================================
+// MONEDA
+// ======================================
+
+let coin = null;
 
 
 // ======================================
-// BANCO DE PREGUNTAS
+// PUNTAJE
 // ======================================
 
-// Lista de preguntas que pueden aparecer al recoger una moneda
+let score = 0;
+
+
+// ======================================
+// CONTROLES
+// ======================================
+
+const keys = {
+
+  left: false,
+
+  right: false
+
+};
+
+
+// ======================================
+// PREGUNTAS
+// ======================================
+
 const questions = [
+
   {
     question: "¿Cuánto es 5 + 3?",
     answer: "8"
   },
+
   {
     question: "¿Cuánto es 10 - 4?",
     answer: "6"
   },
+
   {
     question: "¿Cuánto es 3 x 4?",
     answer: "12"
   },
+
   {
-    question: "¿Cuál es la capital de Costa Rica?",
+    question:
+      "¿Cuál es la capital de Costa Rica?",
     answer: "san jose"
   }
+
 ];
 
 
 // ======================================
-// CONTROLES DEL TECLADO
+// ESCALA RESPONSIVE
 // ======================================
 
-// Se ejecuta cuando una tecla es presionada
-document.addEventListener("keydown", (e) => {
+function getScale() {
 
-  // Guardar la tecla como activa
-  keys[e.key.toLowerCase()] = true;
+  return (
+    game.clientWidth /
+    WORLD_WIDTH
+  );
 
-  // Si se presiona espacio y no está saltando
-  // aplicar fuerza hacia arriba
-  if (e.code === "Space" && !jumping) {
+}
+
+
+// ======================================
+// OBTENER POSICIÓN DE PLATAFORMA
+// ======================================
+
+function getPlatformData(platform) {
+
+  const left =
+    parseFloat(
+      platform.style.left
+    );
+
+  const top =
+    parseFloat(
+      platform.style.top
+    );
+
+  const width =
+    parseFloat(
+      platform.style.width
+    );
+
+
+  return {
+
+    left:
+      (left / 100) *
+      WORLD_WIDTH,
+
+    top:
+      (top / 100) *
+      WORLD_HEIGHT,
+
+    width:
+      (width / 100) *
+      WORLD_WIDTH
+
+  };
+
+}
+
+
+// ======================================
+// BOTÓN IZQUIERDA
+// ======================================
+
+function startLeft(e) {
+
+  e.preventDefault();
+
+  keys.left = true;
+
+}
+
+
+function stopLeft(e) {
+
+  e.preventDefault();
+
+  keys.left = false;
+
+}
+
+
+leftBtn.addEventListener(
+  "pointerdown",
+  startLeft
+);
+
+
+leftBtn.addEventListener(
+  "pointerup",
+  stopLeft
+);
+
+
+leftBtn.addEventListener(
+  "pointercancel",
+  stopLeft
+);
+
+
+leftBtn.addEventListener(
+  "pointerleave",
+  stopLeft
+);
+
+
+// ======================================
+// BOTÓN DERECHA
+// ======================================
+
+function startRight(e) {
+
+  e.preventDefault();
+
+  keys.right = true;
+
+}
+
+
+function stopRight(e) {
+
+  e.preventDefault();
+
+  keys.right = false;
+
+}
+
+
+rightBtn.addEventListener(
+  "pointerdown",
+  startRight
+);
+
+
+rightBtn.addEventListener(
+  "pointerup",
+  stopRight
+);
+
+
+rightBtn.addEventListener(
+  "pointercancel",
+  stopRight
+);
+
+
+rightBtn.addEventListener(
+  "pointerleave",
+  stopRight
+);
+
+
+// ======================================
+// BOTÓN SALTAR
+// ======================================
+
+function jump() {
+
+  if (!jumping) {
+
     velocityY = -13;
+
     jumping = true;
-  }
-});
 
-// Se ejecuta cuando una tecla deja de presionarse
-document.addEventListener("keyup", (e) => {
-
-  // Marcar la tecla como inactiva
-  keys[e.key.toLowerCase()] = false;
-
-});
-
-// ======================================
-// LIMPIAR TECLAS PRESIONADAS
-// ======================================
-
-// Reinicia todas las teclas para evitar
-// que el jugador siga moviéndose después
-// de responder una pregunta
-function clearKeys() {
-
-  for (const key in keys) {
-    keys[key] = false;
   }
 
 }
+
+
+jumpBtn.addEventListener(
+  "pointerdown",
+  (e) => {
+
+    e.preventDefault();
+
+    jump();
+
+  }
+);
+
 
 // ======================================
 // GENERAR MONEDA
 // ======================================
 
-// Crea una moneda amarilla en una posición aleatoria
 function spawnCoin() {
 
-  // Si ya existe una moneda, no crear otra
   if (coin) return;
 
-  // Crear elemento HTML
-  coin = document.createElement("div");
 
-  // Agregar clase CSS
+  coin =
+    document.createElement("div");
+
+
   coin.classList.add("coin");
 
-  // Generar coordenadas aleatorias
-  const randomX = Math.floor(Math.random() * 700) + 20;
-  const randomY = Math.floor(Math.random() * 250) + 50;
 
-  // Posicionar moneda
-  coin.style.left = randomX + "px";
-  coin.style.top = randomY + "px";
+  const randomX =
 
-  // Agregar moneda al mapa
+    Math.floor(
+      Math.random() *
+      700
+    ) + 20;
+
+
+  const randomY =
+
+    Math.floor(
+      Math.random() *
+      250
+    ) + 50;
+
+
+  /*
+    Guardamos las posiciones
+    en coordenadas del mundo.
+  */
+
+  coin.dataset.x =
+    randomX;
+
+  coin.dataset.y =
+    randomY;
+
+
   game.appendChild(coin);
+
 }
 
 
 // ======================================
-// DETECTAR COLISIÓN CON MONEDA
+// ACTUALIZAR MONEDA
 // ======================================
 
-// Verifica si el jugador tocó la moneda
-function checkCoinCollision() {
+function updateCoin() {
 
-  // Si no existe moneda, salir
   if (!coin) return;
 
-  const coinX = parseInt(coin.style.left);
-  const coinY = parseInt(coin.style.top);
 
-  // Detectar si los rectángulos se superponen
-  const touching =
-    x < coinX + 20 &&
-    x + playerWidth > coinX &&
-    y < coinY + 20 &&
-    y + playerHeight > coinY;
+  const scale =
+    getScale();
 
-  // Si hubo contacto
-  if (touching) {
 
-    // Detener cualquier movimiento activo
-    // antes de mostrar la pregunta
-    clearKeys();
-    // Elegir una pregunta aleatoria
-    const randomQuestion =
-      questions[Math.floor(Math.random() * questions.length)];
+  const coinX =
+    parseFloat(
+      coin.dataset.x
+    );
 
-    // Mostrar pregunta
-    const answer = prompt(randomQuestion.question);
 
-    // Validar respuesta
-    if (
-      answer &&
-      answer.toLowerCase().trim() === randomQuestion.answer
-    ) {
+  const coinY =
+    parseFloat(
+      coin.dataset.y
+    );
 
-      // Sumar punto
-      score++;
 
-      // Actualizar marcador
-      scoreDisplay.textContent =
-        "Puntos: " + score;
+  coin.style.left =
 
-      alert("¡Correcto! 🎉");
+    (
+      coinX *
+      scale
+    ) + "px";
 
-    } else {
 
-      alert(
-        "Incorrecto 😢\nLa respuesta correcta era: " +
-        randomQuestion.answer
-      );
-    }
+  coin.style.top =
 
-// Limpiar nuevamente las teclas por si
-// el jugador soltó alguna mientras la
-// ventana de pregunta estaba abierta
-clearKeys();
+    (
+      coinY *
+      scale
+    ) + "px";
 
-    // Eliminar moneda actual
-    coin.remove();
-    coin = null;
-
-    // Crear nueva moneda
-    setTimeout(spawnCoin, 5);
-  }
 }
 
 
 // ======================================
-// COLISIONES CON PLATAFORMAS
+// COLISIÓN CON MONEDA
 // ======================================
 
-// Verifica si el jugador aterrizó sobre una plataforma
-function checkPlatformCollisions(previousY) {
+function checkCoinCollision() {
+
+  if (!coin) return;
+
+
+  const coinX =
+    parseFloat(
+      coin.dataset.x
+    );
+
+
+  const coinY =
+    parseFloat(
+      coin.dataset.y
+    );
+
+
+  const touching =
+
+    x <
+      coinX + 25 &&
+
+    x + PLAYER_WIDTH >
+      coinX &&
+
+    y <
+      coinY + 25 &&
+
+    y + PLAYER_HEIGHT >
+      coinY;
+
+
+  if (touching) {
+
+    keys.left = false;
+
+    keys.right = false;
+
+
+    const randomQuestion =
+
+      questions[
+        Math.floor(
+          Math.random() *
+          questions.length
+        )
+      ];
+
+
+    questionText.textContent =
+      randomQuestion.question;
+
+
+    questionBox.dataset.answer =
+      randomQuestion.answer;
+
+
+    answerInput.value = "";
+
+
+    questionBox.style.display =
+      "block";
+
+
+    answerInput.focus();
+
+
+    coin.remove();
+
+    coin = null;
+
+  }
+
+}
+
+
+// ======================================
+// RESPONDER
+// ======================================
+
+answerBtn.addEventListener(
+  "click",
+  answerQuestion
+);
+
+
+answerInput.addEventListener(
+  "keydown",
+  (e) => {
+
+    if (e.key === "Enter") {
+
+      answerQuestion();
+
+    }
+
+  }
+);
+
+
+function answerQuestion() {
+
+  const answer =
+
+    answerInput.value
+      .toLowerCase()
+      .trim();
+
+
+  const correctAnswer =
+
+    questionBox.dataset.answer;
+
+
+  if (
+    answer ===
+    correctAnswer
+  ) {
+
+    score++;
+
+
+    scoreDisplay.textContent =
+
+      "Puntos: " +
+      score;
+
+
+    alert(
+      "¡Correcto! 🎉"
+    );
+
+  } else {
+
+    alert(
+
+      "Incorrecto 😢\n" +
+
+      "La respuesta correcta era: " +
+
+      correctAnswer
+
+    );
+
+  }
+
+
+  questionBox.style.display =
+    "none";
+
+
+  setTimeout(
+    spawnCoin,
+    300
+  );
+
+}
+
+
+// ======================================
+// COLISIONES
+// ======================================
+
+function checkPlatformCollisions(
+  previousY
+) {
 
   let onPlatform = false;
 
-  platforms.forEach((platform) => {
 
-    // Obtener posición de la plataforma
-    const pLeft = parseInt(platform.style.left);
-    const pTop = parseInt(platform.style.top);
-    const pWidth = parseInt(platform.style.width);
+  platforms.forEach(
+    (platform) => {
 
-    // Calcular bordes del jugador
-    const playerBottom = y + playerHeight;
-    const previousBottom = previousY + playerHeight;
-    const playerRight = x + playerWidth;
 
-    // Detectar aterrizaje desde arriba
-    const landedOnPlatform =
-      previousBottom <= pTop &&
-      playerBottom >= pTop &&
-      playerRight > pLeft &&
-      x < pLeft + pWidth &&
-      velocityY >= 0;
+      const data =
+        getPlatformData(
+          platform
+        );
 
-    if (landedOnPlatform) {
 
-      // Colocar jugador encima de la plataforma
-      y = pTop - playerHeight;
+      const pLeft =
+        data.left;
 
-      // Detener caída
-      velocityY = 0;
 
-      // Ya no está saltando
-      jumping = false;
+      const pTop =
+        data.top;
 
-      onPlatform = true;
+
+      const pWidth =
+        data.width;
+
+
+      const playerBottom =
+
+        y +
+        PLAYER_HEIGHT;
+
+
+      const previousBottom =
+
+        previousY +
+        PLAYER_HEIGHT;
+
+
+      const playerRight =
+
+        x +
+        PLAYER_WIDTH;
+
+
+      const landed =
+
+        previousBottom <=
+          pTop &&
+
+        playerBottom >=
+          pTop &&
+
+        playerRight >
+          pLeft &&
+
+        x <
+          pLeft +
+          pWidth &&
+
+        velocityY >= 0;
+
+
+      if (landed) {
+
+        y =
+
+          pTop -
+          PLAYER_HEIGHT;
+
+
+        velocityY = 0;
+
+        jumping = false;
+
+        onPlatform = true;
+
+      }
+
     }
-  });
+  );
+
 
   return onPlatform;
+
+}
+
+
+// ======================================
+// DIBUJAR JUGADOR
+// ======================================
+
+function drawPlayer() {
+
+  const scale =
+    getScale();
+
+
+  player.style.left =
+
+    (
+      x *
+      scale
+    ) + "px";
+
+
+  player.style.top =
+
+    (
+      y *
+      scale
+    ) + "px";
+
+
+  player.style.width =
+
+    (
+      PLAYER_WIDTH *
+      scale
+    ) + "px";
+
+
+  player.style.height =
+
+    (
+      PLAYER_HEIGHT *
+      scale
+    ) + "px";
+
 }
 
 
@@ -246,75 +724,159 @@ function checkPlatformCollisions(previousY) {
 // GAME LOOP
 // ======================================
 
-// Esta función se ejecuta unas 60 veces por segundo
 function gameLoop() {
 
-  // Guardar posición anterior
+
   const previousY = y;
 
-  // Movimiento hacia la izquierda
-  if (keys["a"]) {
+
+  // ------------------------------
+  // MOVIMIENTO
+  // ------------------------------
+
+  if (keys.left) {
+
     x -= speed;
+
   }
 
-  // Movimiento hacia la derecha
-  if (keys["d"]) {
+
+  if (keys.right) {
+
     x += speed;
+
   }
 
-  // Evitar salir por la izquierda
+
+  // ------------------------------
+  // LÍMITES DEL MUNDO
+  // ------------------------------
+
   if (x < 0) {
+
     x = 0;
+
   }
 
-  // Evitar salir por la derecha
-  if (x > 760) {
-    x = 760;
+
+  if (
+    x >
+    WORLD_WIDTH -
+    PLAYER_WIDTH
+  ) {
+
+    x =
+
+      WORLD_WIDTH -
+      PLAYER_WIDTH;
+
   }
 
-  // Aplicar gravedad
+
+  // ------------------------------
+  // GRAVEDAD
+  // ------------------------------
+
   velocityY += gravity;
 
-  // Mover jugador verticalmente
   y += velocityY;
 
-  // Revisar plataformas
+
+  // ------------------------------
+  // PLATAFORMAS
+  // ------------------------------
+
   let onPlatform =
-    checkPlatformCollisions(previousY);
 
-  // Detectar colisión con el suelo
-  if (y > 310) {
+    checkPlatformCollisions(
+      previousY
+    );
 
-    y = 310;
+
+  // ------------------------------
+  // SUELO
+  // ------------------------------
+
+  const groundY =
+
+    WORLD_HEIGHT -
+    PLAYER_HEIGHT;
+
+
+  if (y >= groundY) {
+
+    y = groundY;
+
     velocityY = 0;
+
     jumping = false;
+
     onPlatform = true;
+
   }
 
-  // Si no está sobre nada, sigue cayendo
+
+  // ------------------------------
+  // ESTADO DE SALTO
+  // ------------------------------
+
   if (!onPlatform) {
+
     jumping = true;
+
   }
 
-  // Dibujar jugador en pantalla
-  player.style.left = x + "px";
-  player.style.top = y + "px";
 
-  // Revisar si tocó una moneda
+  // ------------------------------
+  // DIBUJAR
+  // ------------------------------
+
+  drawPlayer();
+
+  updateCoin();
+
+
+  // ------------------------------
+  // MONEDA
+  // ------------------------------
+
   checkCoinCollision();
 
-  // Pedir al navegador que ejecute
-  // nuevamente gameLoop en el siguiente frame
-  requestAnimationFrame(gameLoop);
+
+  // ------------------------------
+  // SIGUIENTE FRAME
+  // ------------------------------
+
+  requestAnimationFrame(
+    gameLoop
+  );
+
 }
 
 
 // ======================================
-// INICIO DEL JUEGO
+// INICIAR
 // ======================================
 
-// Crear la primera moneda
 spawnCoin();
 
-// Iniciar el ciclo principal
 gameLoop();
+
+
+// ======================================
+// RESPONSIVE
+// ======================================
+
+// Si cambia el tamaño de la pantalla,
+// el juego se adapta automáticamente.
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    drawPlayer();
+
+    updateCoin();
+
+  }
+);

@@ -1,24 +1,139 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
   <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>Mini Mario</title>
-  <link rel="stylesheet" href="style.css">
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
 </head>
+
+
 <body>
-<div id="game">
 
-  <div id="score">Puntos: 0</div>
+  <h1>🍄 Mini Mario</h1>
 
-  <div id="player"></div>
 
-  <div class="platform" style="left:0px; top:350px; width:800px;"></div>
-  <div class="platform" style="left:300px; top:250px; width:200px;"></div>
-  <div class="platform" style="left:550px; top:180px; width:150px;"></div>
-  <div class="platform" style="left:100px; top:150px; width:120px;"></div>
+  <!-- ======================================
+  JUEGO
+  ====================================== -->
 
-</div>
-<script src="script.js"></script>
+  <div id="game">
+
+    <!-- MARCADOR -->
+
+    <div id="score">
+      Puntos: 0
+    </div>
+
+
+    <!-- JUGADOR -->
+
+    <div id="player"></div>
+
+
+    <!-- PLATAFORMAS -->
+
+    <div
+      class="platform"
+      style="left:0%; top:87.5%; width:100%;"
+    ></div>
+
+
+    <div
+      class="platform"
+      style="left:37.5%; top:62.5%; width:25%;"
+    ></div>
+
+
+    <div
+      class="platform"
+      style="left:68.75%; top:45%; width:18.75%;"
+    ></div>
+
+
+    <div
+      class="platform"
+      style="left:12.5%; top:37.5%; width:15%;"
+    ></div>
+
+  </div>
+
+
+  <!-- ======================================
+       CONTROLES
+  ====================================== -->
+
+  <div id="mobile-controls">
+
+    <button
+      id="leftBtn"
+      class="control-btn"
+    >
+      ◀
+    </button>
+
+
+    <button
+      id="jumpBtn"
+      class="control-btn jump-btn"
+    >
+      ▲
+    </button>
+
+
+    <button
+      id="rightBtn"
+      class="control-btn"
+    >
+      ▶
+    </button>
+
+  </div>
+
+
+  <!-- ======================================
+      PREGUNTA
+  ====================================== -->
+
+  <div
+    id="questionBox"
+    class="question-box"
+  >
+
+    <h2 id="questionText">
+      Pregunta
+    </h2>
+
+
+    <input
+      type="text"
+      id="answerInput"
+      placeholder="Escribe tu respuesta"
+      autocomplete="off"
+    >
+
+
+    <button id="answerBtn">
+      Responder
+    </button>
+
+  </div>
+
+
+  <script src="script.js"></script>
 
 </body>
+
 </html>
