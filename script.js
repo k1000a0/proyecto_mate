@@ -1,116 +1,176 @@
-// ======================================
-// ELEMENTOS
-// ======================================
+// ==================================================
+// ELEMENTOS DE LAS PANTALLAS
+// ==================================================
 
-const player =
-  document.getElementById("player");
+const startScreen =
+  document.getElementById(
+    "startScreen"
+  );
 
-const platforms =
-  document.querySelectorAll(".platform");
+const gameScreen =
+  document.getElementById(
+    "gameScreen"
+  );
+
+const endScreen =
+  document.getElementById(
+    "endScreen"
+  );
+
+
+// ==================================================
+// ELEMENTOS DEL INICIO
+// ==================================================
+
+const playerNameInput =
+  document.getElementById(
+    "playerName"
+  );
+
+const startBtn =
+  document.getElementById(
+    "startBtn"
+  );
+
+const nameError =
+  document.getElementById(
+    "nameError"
+  );
+
+
+// ==================================================
+// ELEMENTOS DEL JUEGO
+// ==================================================
 
 const game =
-  document.getElementById("game");
+  document.getElementById(
+    "game"
+  );
+
+const player =
+  document.getElementById(
+    "player"
+  );
+
+const platforms =
+  document.querySelectorAll(
+    ".platform"
+  );
+
+const playerDisplay =
+  document.getElementById(
+    "playerDisplay"
+  );
 
 const scoreDisplay =
-  document.getElementById("score");
+  document.getElementById(
+    "score"
+  );
+
+const timerDisplay =
+  document.getElementById(
+    "timer"
+  );
 
 
-// ======================================
-// BOTONES
-// ======================================
+// ==================================================
+// ELEMENTOS DE LA PANTALLA FINAL
+// ==================================================
 
-const leftBtn =
-  document.getElementById("leftBtn");
+const finalPlayerName =
+  document.getElementById(
+    "finalPlayerName"
+  );
 
-const rightBtn =
-  document.getElementById("rightBtn");
+const finalScore =
+  document.getElementById(
+    "finalScore"
+  );
 
-const jumpBtn =
-  document.getElementById("jumpBtn");
+const restartBtn =
+  document.getElementById(
+    "restartBtn"
+  );
 
 
-// ======================================
-// PREGUNTAS
-// ======================================
+// ==================================================
+// ELEMENTOS DE PREGUNTAS
+// ==================================================
 
 const questionBox =
-  document.getElementById("questionBox");
+  document.getElementById(
+    "questionBox"
+  );
 
 const questionText =
-  document.getElementById("questionText");
+  document.getElementById(
+    "questionText"
+  );
 
 const answerInput =
-  document.getElementById("answerInput");
+  document.getElementById(
+    "answerInput"
+  );
 
 const answerBtn =
-  document.getElementById("answerBtn");
+  document.getElementById(
+    "answerBtn"
+  );
 
 
-// ======================================
+// ==================================================
+// BOTONES
+// ==================================================
+
+const leftBtn =
+  document.getElementById(
+    "leftBtn"
+  );
+
+const rightBtn =
+  document.getElementById(
+    "rightBtn"
+  );
+
+const jumpBtn =
+  document.getElementById(
+    "jumpBtn"
+  );
+
+
+// ==================================================
 // CONFIGURACIÓN DEL MUNDO
-// ======================================
-
-// Estas son las dimensiones originales
-// de tu juego.
+// ==================================================
 
 const WORLD_WIDTH = 800;
 
 const WORLD_HEIGHT = 400;
-
-
-// ======================================
-// JUGADOR
-// ======================================
 
 const PLAYER_WIDTH = 40;
 
 const PLAYER_HEIGHT = 40;
 
 
-// ======================================
-// POSICIÓN
-// ======================================
+// ==================================================
+// VARIABLES DEL JUGADOR
+// ==================================================
 
 let x = 100;
 
 let y = 100;
 
-
-// ======================================
-// FÍSICA
-// ======================================
-
 let velocityY = 0;
 
 const gravity = 0.5;
 
+const speed = 5;
+
 let jumping = true;
 
 
-// ======================================
-// VELOCIDAD
-// ======================================
-
-const speed = 5;
-
-
-// ======================================
-// MONEDA
-// ======================================
-
-let coin = null;
-
-
-// ======================================
-// PUNTAJE
-// ======================================
-
-let score = 0;
-
-
-// ======================================
+// ==================================================
 // CONTROLES
-// ======================================
+// ==================================================
 
 const keys = {
 
@@ -121,199 +181,539 @@ const keys = {
 };
 
 
-// ======================================
+// ==================================================
+// MONEDA
+// ==================================================
+
+let coin = null;
+
+
+// ==================================================
+// PUNTUACIÓN
+// ==================================================
+
+let score = 0;
+
+
+// ==================================================
+// NOMBRE
+// ==================================================
+
+let currentPlayerName = "";
+
+
+// ==================================================
+// CRONÓMETRO
+// ==================================================
+
+let timeLeft = 10 * 60;
+
+let timerInterval = null;
+
+
+// ==================================================
 // PREGUNTAS
-// ======================================
+// ==================================================
 
 const questions = [
 
   {
-    question: "¿Cuánto es 5 + 3?",
-    answer: "8"
+    question:
+      "¿Cuánto es 5 + 3?",
+
+    answer:
+      "8"
+
   },
 
-  {
-    question: "¿Cuánto es 10 - 4?",
-    answer: "6"
-  },
 
   {
-    question: "¿Cuánto es 3 x 4?",
-    answer: "12"
+    question:
+      "¿Cuánto es 10 - 4?",
+
+    answer:
+      "6"
+
   },
+
+
+  {
+    question:
+      "¿Cuánto es 3 x 4?",
+
+    answer:
+      "12"
+
+  },
+
 
   {
     question:
       "¿Cuál es la capital de Costa Rica?",
-    answer: "san jose"
+
+    answer:
+      "san jose"
+
   }
 
 ];
 
 
-// ======================================
-// ESCALA RESPONSIVE
-// ======================================
+// ==================================================
+// COMENZAR JUEGO
+// ==================================================
 
-function getScale() {
+startBtn.addEventListener(
+  "click",
+  startGame
+);
 
-  return (
-    game.clientWidth /
-    WORLD_WIDTH
+
+playerNameInput.addEventListener(
+  "keydown",
+  (e) => {
+
+    if (
+      e.key === "Enter"
+    ) {
+
+      startGame();
+
+    }
+
+  }
+);
+
+
+function startGame() {
+
+
+  // Obtener nombre
+
+  const name =
+
+    playerNameInput.value
+      .trim();
+
+
+  // Validar nombre
+
+  if (
+    name === ""
+  ) {
+
+    nameError.style.display =
+      "block";
+
+    playerNameInput.focus();
+
+    return;
+
+  }
+
+
+  // Guardar nombre
+
+  currentPlayerName =
+    name;
+
+
+  // Mostrar nombre
+
+  playerDisplay.textContent =
+
+    "👤 " +
+    currentPlayerName;
+
+
+  // Ocultar inicio
+
+  startScreen.style.display =
+    "none";
+
+
+  // Mostrar juego
+
+  gameScreen.style.display =
+    "block";
+
+
+  // Reiniciar variables
+
+  score = 0;
+
+  scoreDisplay.textContent =
+    "⭐ Puntos: 0";
+
+
+  x = 100;
+
+  y = 100;
+
+  velocityY = 0;
+
+  jumping = true;
+
+
+  // Reiniciar tiempo
+
+  timeLeft =
+    10 * 60;
+
+
+  updateTimerDisplay();
+
+
+  // Iniciar cronómetro
+
+  startTimer();
+
+
+  // Crear moneda
+
+  if (!coin) {
+
+    spawnCoin();
+
+  }
+
+}
+
+
+// ==================================================
+// CRONÓMETRO
+// ==================================================
+
+function startTimer() {
+
+
+  // Detener cronómetro anterior
+
+  clearInterval(
+    timerInterval
   );
 
-}
+
+  timerInterval =
+
+    setInterval(
+      () => {
 
 
-// ======================================
-// OBTENER POSICIÓN DE PLATAFORMA
-// ======================================
+        timeLeft--;
 
-function getPlatformData(platform) {
 
-  const left =
-    parseFloat(
-      platform.style.left
+        updateTimerDisplay();
+
+
+        // Tiempo terminado
+
+        if (
+          timeLeft <= 0
+        ) {
+
+          clearInterval(
+            timerInterval
+          );
+
+
+          endGame();
+
+        }
+
+
+      },
+      1000
     );
-
-  const top =
-    parseFloat(
-      platform.style.top
-    );
-
-  const width =
-    parseFloat(
-      platform.style.width
-    );
-
-
-  return {
-
-    left:
-      (left / 100) *
-      WORLD_WIDTH,
-
-    top:
-      (top / 100) *
-      WORLD_HEIGHT,
-
-    width:
-      (width / 100) *
-      WORLD_WIDTH
-
-  };
 
 }
 
 
-// ======================================
-// BOTÓN IZQUIERDA
-// ======================================
+function updateTimerDisplay() {
 
-function startLeft(e) {
 
-  e.preventDefault();
+  const minutes =
 
-  keys.left = true;
+    Math.floor(
+      timeLeft / 60
+    );
+
+
+  const seconds =
+
+    timeLeft % 60;
+
+
+  timerDisplay.textContent =
+
+    "⏱️ " +
+
+    String(minutes)
+      .padStart(
+        2,
+        "0"
+      ) +
+
+    ":" +
+
+    String(seconds)
+      .padStart(
+        2,
+        "0"
+      );
 
 }
 
 
-function stopLeft(e) {
+// ==================================================
+// FINALIZAR JUEGO
+// ==================================================
 
-  e.preventDefault();
+function endGame() {
+
+
+  // Detener cronómetro
+
+  clearInterval(
+    timerInterval
+  );
+
+
+  // Cerrar pregunta
+
+  questionBox.style.display =
+    "none";
+
+
+  // Mostrar datos finales
+
+  finalPlayerName.textContent =
+
+    currentPlayerName;
+
+
+  finalScore.textContent =
+
+    score;
+
+
+  // Ocultar juego
+
+  gameScreen.style.display =
+    "none";
+
+
+  // Mostrar pantalla final
+
+  endScreen.style.display =
+    "flex";
+
+
+  // Detener movimiento
 
   keys.left = false;
-
-}
-
-
-leftBtn.addEventListener(
-  "pointerdown",
-  startLeft
-);
-
-
-leftBtn.addEventListener(
-  "pointerup",
-  stopLeft
-);
-
-
-leftBtn.addEventListener(
-  "pointercancel",
-  stopLeft
-);
-
-
-leftBtn.addEventListener(
-  "pointerleave",
-  stopLeft
-);
-
-
-// ======================================
-// BOTÓN DERECHA
-// ======================================
-
-function startRight(e) {
-
-  e.preventDefault();
-
-  keys.right = true;
-
-}
-
-
-function stopRight(e) {
-
-  e.preventDefault();
 
   keys.right = false;
 
 }
 
 
+// ==================================================
+// REINICIAR
+// ==================================================
+
+restartBtn.addEventListener(
+  "click",
+  () => {
+
+
+    // Ocultar pantalla final
+
+    endScreen.style.display =
+      "none";
+
+
+    // Mostrar inicio
+
+    startScreen.style.display =
+      "flex";
+
+
+    // Limpiar nombre
+
+    playerNameInput.value = "";
+
+
+    // Limpiar moneda
+
+    if (coin) {
+
+      coin.remove();
+
+      coin = null;
+
+    }
+
+  }
+);
+
+
+// ==================================================
+// ESCALA RESPONSIVE
+// ==================================================
+
+function getScale() {
+
+
+  return (
+
+    game.clientWidth /
+    WORLD_WIDTH
+
+  );
+
+}
+
+
+// ==================================================
+// DIBUJAR JUGADOR
+// ==================================================
+
+function drawPlayer() {
+
+
+  const scale =
+    getScale();
+
+
+  player.style.left =
+
+    (
+      x *
+      scale
+    ) + "px";
+
+
+  player.style.top =
+
+    (
+      y *
+      scale
+    ) + "px";
+
+
+  player.style.width =
+
+    (
+      PLAYER_WIDTH *
+      scale
+    ) + "px";
+
+
+  player.style.height =
+
+    (
+      PLAYER_HEIGHT *
+      scale
+    ) + "px";
+
+}
+
+
+// ==================================================
+// CONTROLES TÁCTILES
+// ==================================================
+
+
+// IZQUIERDA
+
+leftBtn.addEventListener(
+  "pointerdown",
+  (e) => {
+
+    e.preventDefault();
+
+    keys.left = true;
+
+  }
+);
+
+
+leftBtn.addEventListener(
+  "pointerup",
+  () => {
+
+    keys.left = false;
+
+  }
+);
+
+
+leftBtn.addEventListener(
+  "pointerleave",
+  () => {
+
+    keys.left = false;
+
+  }
+);
+
+
+leftBtn.addEventListener(
+  "pointercancel",
+  () => {
+
+    keys.left = false;
+
+  }
+);
+
+
+// DERECHA
+
 rightBtn.addEventListener(
   "pointerdown",
-  startRight
+  (e) => {
+
+    e.preventDefault();
+
+    keys.right = true;
+
+  }
 );
 
 
 rightBtn.addEventListener(
   "pointerup",
-  stopRight
-);
+  () => {
 
+    keys.right = false;
 
-rightBtn.addEventListener(
-  "pointercancel",
-  stopRight
+  }
 );
 
 
 rightBtn.addEventListener(
   "pointerleave",
-  stopRight
+  () => {
+
+    keys.right = false;
+
+  }
 );
 
 
-// ======================================
-// BOTÓN SALTAR
-// ======================================
+rightBtn.addEventListener(
+  "pointercancel",
+  () => {
 
-function jump() {
-
-  if (!jumping) {
-
-    velocityY = -13;
-
-    jumping = true;
+    keys.right = false;
 
   }
+);
 
-}
 
+// SALTAR
 
 jumpBtn.addEventListener(
   "pointerdown",
@@ -327,20 +727,41 @@ jumpBtn.addEventListener(
 );
 
 
-// ======================================
+function jump() {
+
+
+  if (
+    !jumping
+  ) {
+
+    velocityY = -13;
+
+    jumping = true;
+
+  }
+
+}
+
+
+// ==================================================
 // GENERAR MONEDA
-// ======================================
+// ==================================================
 
 function spawnCoin() {
+
 
   if (coin) return;
 
 
   coin =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
 
-  coin.classList.add("coin");
+  coin.classList.add(
+    "coin"
+  );
 
 
   const randomX =
@@ -359,30 +780,34 @@ function spawnCoin() {
     ) + 50;
 
 
-  /*
-    Guardamos las posiciones
-    en coordenadas del mundo.
-  */
-
   coin.dataset.x =
     randomX;
+
 
   coin.dataset.y =
     randomY;
 
 
-  game.appendChild(coin);
+  game.appendChild(
+    coin
+  );
+
+
+  updateCoin();
 
 }
 
 
-// ======================================
+// ==================================================
 // ACTUALIZAR MONEDA
-// ======================================
+// ==================================================
 
 function updateCoin() {
 
-  if (!coin) return;
+
+  if (
+    !coin
+  ) return;
 
 
   const scale =
@@ -390,12 +815,14 @@ function updateCoin() {
 
 
   const coinX =
+
     parseFloat(
       coin.dataset.x
     );
 
 
   const coinY =
+
     parseFloat(
       coin.dataset.y
     );
@@ -416,25 +843,46 @@ function updateCoin() {
       scale
     ) + "px";
 
+
+  coin.style.width =
+
+    (
+      25 *
+      scale
+    ) + "px";
+
+
+  coin.style.height =
+
+    (
+      25 *
+      scale
+    ) + "px";
+
 }
 
 
-// ======================================
+// ==================================================
 // COLISIÓN CON MONEDA
-// ======================================
+// ==================================================
 
 function checkCoinCollision() {
 
-  if (!coin) return;
+
+  if (
+    !coin
+  ) return;
 
 
   const coinX =
+
     parseFloat(
       coin.dataset.x
     );
 
 
   const coinY =
+
     parseFloat(
       coin.dataset.y
     );
@@ -455,7 +903,10 @@ function checkCoinCollision() {
       coinY;
 
 
-  if (touching) {
+  if (
+    touching
+  ) {
+
 
     keys.left = false;
 
@@ -473,10 +924,12 @@ function checkCoinCollision() {
 
 
     questionText.textContent =
+
       randomQuestion.question;
 
 
     questionBox.dataset.answer =
+
       randomQuestion.answer;
 
 
@@ -484,7 +937,7 @@ function checkCoinCollision() {
 
 
     questionBox.style.display =
-      "block";
+      "flex";
 
 
     answerInput.focus();
@@ -499,9 +952,9 @@ function checkCoinCollision() {
 }
 
 
-// ======================================
-// RESPONDER
-// ======================================
+// ==================================================
+// RESPONDER PREGUNTA
+// ==================================================
 
 answerBtn.addEventListener(
   "click",
@@ -513,7 +966,9 @@ answerInput.addEventListener(
   "keydown",
   (e) => {
 
-    if (e.key === "Enter") {
+    if (
+      e.key === "Enter"
+    ) {
 
       answerQuestion();
 
@@ -524,6 +979,7 @@ answerInput.addEventListener(
 
 
 function answerQuestion() {
+
 
   const answer =
 
@@ -542,12 +998,13 @@ function answerQuestion() {
     correctAnswer
   ) {
 
+
     score++;
 
 
     scoreDisplay.textContent =
 
-      "Puntos: " +
+      "⭐ Puntos: " +
       score;
 
 
@@ -555,7 +1012,9 @@ function answerQuestion() {
       "¡Correcto! 🎉"
     );
 
+
   } else {
+
 
     alert(
 
@@ -582,15 +1041,81 @@ function answerQuestion() {
 }
 
 
-// ======================================
-// COLISIONES
-// ======================================
+// ==================================================
+// COLISIONES CON PLATAFORMAS
+// ==================================================
+
+function getPlatformData(
+  platform
+) {
+
+
+  const left =
+
+    parseFloat(
+      platform.style.left
+    );
+
+
+  const top =
+
+    parseFloat(
+      platform.style.top
+    );
+
+
+  const width =
+
+    parseFloat(
+      platform.style.width
+    );
+
+
+  return {
+
+
+    left:
+
+      (
+        left /
+        100
+      ) *
+      WORLD_WIDTH,
+
+
+    top:
+
+      (
+        top /
+        100
+      ) *
+      WORLD_HEIGHT,
+
+
+    width:
+
+      (
+        width /
+        100
+      ) *
+      WORLD_WIDTH
+
+  };
+
+}
+
+
+// ==================================================
+// DETECTAR PLATAFORMAS
+// ==================================================
 
 function checkPlatformCollisions(
   previousY
 ) {
 
-  let onPlatform = false;
+
+  let onPlatform =
+    false;
 
 
   platforms.forEach(
@@ -598,6 +1123,7 @@ function checkPlatformCollisions(
 
 
       const data =
+
         getPlatformData(
           platform
         );
@@ -651,7 +1177,10 @@ function checkPlatformCollisions(
         velocityY >= 0;
 
 
-      if (landed) {
+      if (
+        landed
+      ) {
+
 
         y =
 
@@ -661,7 +1190,9 @@ function checkPlatformCollisions(
 
         velocityY = 0;
 
+
         jumping = false;
+
 
         onPlatform = true;
 
@@ -676,83 +1207,42 @@ function checkPlatformCollisions(
 }
 
 
-// ======================================
-// DIBUJAR JUGADOR
-// ======================================
-
-function drawPlayer() {
-
-  const scale =
-    getScale();
-
-
-  player.style.left =
-
-    (
-      x *
-      scale
-    ) + "px";
-
-
-  player.style.top =
-
-    (
-      y *
-      scale
-    ) + "px";
-
-
-  player.style.width =
-
-    (
-      PLAYER_WIDTH *
-      scale
-    ) + "px";
-
-
-  player.style.height =
-
-    (
-      PLAYER_HEIGHT *
-      scale
-    ) + "px";
-
-}
-
-
-// ======================================
+// ==================================================
 // GAME LOOP
-// ======================================
+// ==================================================
 
 function gameLoop() {
 
 
-  const previousY = y;
+  const previousY =
+    y;
 
 
-  // ------------------------------
   // MOVIMIENTO
-  // ------------------------------
 
-  if (keys.left) {
+  if (
+    keys.left
+  ) {
 
     x -= speed;
 
   }
 
 
-  if (keys.right) {
+  if (
+    keys.right
+  ) {
 
     x += speed;
 
   }
 
 
-  // ------------------------------
-  // LÍMITES DEL MUNDO
-  // ------------------------------
+  // LÍMITES
 
-  if (x < 0) {
+  if (
+    x < 0
+  ) {
 
     x = 0;
 
@@ -773,18 +1263,17 @@ function gameLoop() {
   }
 
 
-  // ------------------------------
   // GRAVEDAD
-  // ------------------------------
 
-  velocityY += gravity;
-
-  y += velocityY;
+  velocityY +=
+    gravity;
 
 
-  // ------------------------------
+  y +=
+    velocityY;
+
+
   // PLATAFORMAS
-  // ------------------------------
 
   let onPlatform =
 
@@ -793,9 +1282,7 @@ function gameLoop() {
     );
 
 
-  // ------------------------------
   // SUELO
-  // ------------------------------
 
   const groundY =
 
@@ -803,49 +1290,49 @@ function gameLoop() {
     PLAYER_HEIGHT;
 
 
-  if (y >= groundY) {
+  if (
+    y >= groundY
+  ) {
 
-    y = groundY;
 
-    velocityY = 0;
+    y =
+      groundY;
 
-    jumping = false;
 
-    onPlatform = true;
+    velocityY =
+      0;
+
+
+    jumping =
+      false;
+
+
+    onPlatform =
+      true;
 
   }
 
 
-  // ------------------------------
   // ESTADO DE SALTO
-  // ------------------------------
 
-  if (!onPlatform) {
+  if (
+    !onPlatform
+  ) {
 
-    jumping = true;
+    jumping =
+      true;
 
   }
 
 
-  // ------------------------------
   // DIBUJAR
-  // ------------------------------
 
   drawPlayer();
 
   updateCoin();
 
-
-  // ------------------------------
-  // MONEDA
-  // ------------------------------
-
   checkCoinCollision();
 
-
-  // ------------------------------
-  // SIGUIENTE FRAME
-  // ------------------------------
 
   requestAnimationFrame(
     gameLoop
@@ -854,21 +1341,9 @@ function gameLoop() {
 }
 
 
-// ======================================
-// INICIAR
-// ======================================
-
-spawnCoin();
-
-gameLoop();
-
-
-// ======================================
-// RESPONSIVE
-// ======================================
-
-// Si cambia el tamaño de la pantalla,
-// el juego se adapta automáticamente.
+// ==================================================
+// REDIMENSIONAR
+// ==================================================
 
 window.addEventListener(
   "resize",
@@ -880,3 +1355,10 @@ window.addEventListener(
 
   }
 );
+
+
+// ==================================================
+// INICIAR GAME LOOP
+// ==================================================
+
+gameLoop();

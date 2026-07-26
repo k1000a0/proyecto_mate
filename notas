@@ -118,16 +118,272 @@ Proyecto educativo desarrollado para practicar:
 * Programación de videojuegos 2D con JavaScript
 
 
-
-
-A MEJORAR: 
-Cuadros responsive para tipo tipo de pantalla
-Agregar un timer
-Agregar banco de preguntas almacenado localmente, 12 preguntas con su respectiva respuesta. 
-
-
 TEMA: ARBOLES /// --- ///
 
 7 - 7 - 7 - 7 
 
 settings> pages > Source > deploy from a branch > branch > main / root > save > wait for system to save and load  website |||| Your site is live at https://k1000a0.github.io/proyecto_mate/ 
+
+
+---------------------------------
+########################## Guía para subir cambios a GitHub ##############################
+
+Esta guía explica cómo subir los cambios realizados en un proyecto desde Visual Studio Code hacia un repositorio de GitHub.
+
+---
+
+## 1. Abrir el proyecto
+
+1. Abrir **Visual Studio Code**.
+
+2. Ir al menú:
+
+   ```
+   File → Open Folder
+   ```
+
+3. Seleccionar la carpeta donde se encuentra el proyecto.
+
+   Por ejemplo:
+
+   ```
+   C:\Users\Christian\Desktop\TestMario
+   ```
+
+4. Verificar que dentro de la carpeta estén los archivos principales del proyecto:
+
+   ```
+   index.html
+   style.css
+   script.js
+   ```
+
+---
+
+## 2. Abrir la terminal
+
+1. En Visual Studio Code, ir al menú:
+
+   ```
+   Terminal → New Terminal
+   ```
+
+2. Se abrirá una terminal en la parte inferior de Visual Studio Code.
+
+3. Verificar que la terminal esté ubicada dentro de la carpeta del proyecto.
+
+   Por ejemplo:
+
+   ```
+   PS C:\Users\Christian\Desktop\TestMario>
+   ```
+
+---
+
+## 3. Revisar los cambios
+
+Para comprobar qué archivos fueron modificados, escribir el siguiente comando:
+
+```bash
+git status
+```
+
+Si existen cambios, aparecerán los archivos modificados.
+
+Por ejemplo:
+
+```text
+modified: index.html
+modified: script.js
+modified: style.css
+```
+
+---
+
+## 4. Preparar los archivos para subir
+
+Para seleccionar todos los cambios realizados, escribir:
+
+```bash
+git add .
+```
+
+También se pueden seleccionar archivos específicos:
+
+```bash
+git add index.html
+git add style.css
+git add script.js
+```
+
+---
+
+## 5. Crear un Commit
+
+Después de preparar los archivos, se debe crear un **commit**.
+
+El commit sirve para guardar una versión de los cambios realizados.
+
+Escribir:
+
+```bash
+git commit -m "Actualizar juego y diseño responsive"
+```
+
+El mensaje puede cambiarse según los cambios realizados.
+
+Por ejemplo:
+
+```bash
+git commit -m "Agregar controles para celulares"
+```
+
+---
+
+## 6. Subir los cambios a GitHub
+
+Para enviar los cambios al repositorio de GitHub, escribir:
+
+```bash
+git push origin main
+```
+
+Si todo funciona correctamente, los cambios serán enviados al repositorio de GitHub.
+
+---
+
+## 7. Verificar los cambios en GitHub
+
+1. Abrir el repositorio del proyecto en GitHub.
+
+2. Revisar que los archivos modificados aparezcan actualizados.
+
+3. Esperar unos momentos para que GitHub Pages publique los cambios.
+
+---
+
+## 8. Verificar el sitio web
+
+Abrir el sitio web del proyecto:
+
+```text
+https://k1000a0.github.io/proyecto_mate/
+```
+
+Si los cambios no aparecen inmediatamente:
+
+1. Presionar:
+
+   ```
+   Ctrl + F5
+   ```
+
+2. También se puede abrir el sitio en una ventana de incógnito.
+
+Esto permite actualizar la página y evitar que el navegador muestre una versión anterior guardada en caché.
+
+---
+
+# Resumen rápido
+
+Cada vez que se realicen cambios en el proyecto, ejecutar los siguientes comandos:
+
+### Paso 1: Revisar cambios
+
+```bash
+git status
+```
+
+### Paso 2: Preparar cambios
+
+```bash
+git add .
+```
+
+### Paso 3: Crear un commit
+
+```bash
+git commit -m "Descripción de los cambios"
+```
+
+### Paso 4: Subir cambios a GitHub
+
+```bash
+git push origin main
+```
+
+El proceso completo es:
+
+```text
+Modificar archivos
+       ↓
+Guardar archivos
+       ↓
+git status
+       ↓
+git add .
+       ↓
+git commit -m "Descripción de los cambios"
+       ↓
+git push origin main
+       ↓
+GitHub
+       ↓
+GitHub Pages
+       ↓
+Sitio web actualizado
+```
+
+---
+
+## Ejemplo práctico
+
+Supongamos que se agregaron botones para controlar el juego desde un celular.
+
+Primero, revisar los cambios:
+
+```bash
+git status
+```
+
+Después, preparar los archivos:
+
+```bash
+git add .
+```
+
+Crear el commit:
+
+```bash
+git commit -m "Agregar controles para celulares"
+```
+
+Finalmente, subir los cambios:
+
+```bash
+git push origin main
+```
+
+Después de unos momentos, los cambios estarán disponibles en el repositorio de GitHub y, si el proyecto utiliza GitHub Pages, también estarán disponibles en el sitio web.
+
+---
+
+## Importante
+
+Cada vez que se modifique el proyecto, se debe repetir el proceso:
+
+```bash
+git add .
+git commit -m "Descripción de los cambios"
+git push origin main
+```
+
+De esta manera, los cambios realizados en el proyecto local se guardarán en GitHub y posteriormente se actualizará el sitio publicado con GitHub Pages.
+
+
+
+
+
+-----------------------------------A MEJORAR:
+Agregar un timer
+Agregar banco de preguntas almacenado localmente, 12 preguntas con su respectiva respuesta. 

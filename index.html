@@ -10,7 +10,7 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Mini Mario</title>
+  <title>Mini Mario - Juego Matemático</title>
 
   <link
     rel="stylesheet"
@@ -22,117 +22,467 @@
 
 <body>
 
-  <h1>🍄 Mini Mario</h1>
+
+  <!-- ==================================================
+       PANTALLA 1: INICIO
+  =================================================== -->
+
+  <section id="startScreen">
 
 
-  <!-- ======================================
-  JUEGO
-  ====================================== -->
+    <div class="start-card">
 
-  <div id="game">
 
-    <!-- MARCADOR -->
+      <!-- TÍTULO -->
 
-    <div id="score">
-      Puntos: 0
+      <div class="game-logo">
+
+        <span>🍄</span>
+
+        <h1>
+          MINI MARIO
+        </h1>
+
+        <span>🍄</span>
+
+      </div>
+
+
+      <p class="subtitle">
+
+        🎮 ¡Una aventura matemática! 🧠
+
+      </p>
+
+
+      <!-- ==============================================
+           REGLAS
+      =============================================== -->
+
+      <div class="rules">
+
+
+        <h2>
+          📜 Reglas del juego
+        </h2>
+
+
+        <div class="rule">
+
+          <span class="rule-icon">
+            🪙
+          </span>
+
+          <span>
+            Recoge las monedas que aparecen
+            durante la aventura.
+          </span>
+
+        </div>
+
+
+        <div class="rule">
+
+          <span class="rule-icon">
+            🧠
+          </span>
+
+          <span>
+            Cada moneda contiene una pregunta
+            que debes responder.
+          </span>
+
+        </div>
+
+
+        <div class="rule">
+
+          <span class="rule-icon">
+            ⭐
+          </span>
+
+          <span>
+            Obtén un punto por cada respuesta
+            correcta.
+          </span>
+
+        </div>
+
+
+        <div class="rule">
+
+          <span class="rule-icon">
+            🎮
+          </span>
+
+          <span>
+            Usa los controles para mover y
+            saltar con tu personaje.
+          </span>
+
+        </div>
+
+
+        <div class="rule">
+
+          <span class="rule-icon">
+            ⏱️
+          </span>
+
+          <span>
+            Tienes 10 minutos para completar
+            el desafío.
+          </span>
+
+        </div>
+
+
+      </div>
+
+
+      <!-- ==============================================
+           NOMBRE DEL PARTICIPANTE
+      =============================================== -->
+
+      <div class="name-section">
+
+
+        <label for="playerName">
+
+          👤 Nombre del participante
+
+        </label>
+
+
+        <input
+          type="text"
+          id="playerName"
+          placeholder="Escribe tu nombre"
+          maxlength="20"
+          autocomplete="off"
+        >
+
+
+      </div>
+
+
+      <!-- ==============================================
+           BOTÓN COMENZAR
+      =============================================== -->
+
+      <button
+        id="startBtn"
+        class="start-btn"
+      >
+
+        COMENZAR! 🚀
+
+      </button>
+
+
+      <!-- MENSAJE DE ERROR -->
+
+      <p
+        id="nameError"
+        class="name-error"
+      >
+
+        ⚠️ Por favor, escribe tu nombre
+        para comenzar.
+
+      </p>
+
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       PANTALLA 2: JUEGO
+  =================================================== -->
+
+  <section
+    id="gameScreen"
+    class="game-screen"
+  >
+
+
+    <!-- ================================================
+         INFORMACIÓN DEL JUEGO
+    ================================================= -->
+
+    <div id="gameInfo">
+
+
+      <div class="info-box">
+
+        <span id="playerDisplay">
+          👤 Jugador
+        </span>
+
+      </div>
+
+
+      <div class="info-box">
+
+        <span id="score">
+          ⭐ Puntos: 0
+        </span>
+
+      </div>
+
+
+      <div class="info-box timer-box">
+
+        <span id="timer">
+          ⏱️ 10:00
+        </span>
+
+      </div>
+
+
     </div>
 
 
-    <!-- JUGADOR -->
+    <!-- ================================================
+         ÁREA DEL JUEGO
+    ================================================= -->
 
-    <div id="player"></div>
-
-
-    <!-- PLATAFORMAS -->
-
-    <div
-      class="platform"
-      style="left:0%; top:87.5%; width:100%;"
-    ></div>
+    <div id="game">
 
 
-    <div
-      class="platform"
-      style="left:37.5%; top:62.5%; width:25%;"
-    ></div>
+      <!-- JUGADOR -->
+
+      <div id="player"></div>
 
 
-    <div
-      class="platform"
-      style="left:68.75%; top:45%; width:18.75%;"
-    ></div>
+      <!-- PLATAFORMAS -->
 
 
-    <div
-      class="platform"
-      style="left:12.5%; top:37.5%; width:15%;"
-    ></div>
+      <!-- SUELO -->
 
-  </div>
-
-
-  <!-- ======================================
-       CONTROLES
-  ====================================== -->
-
-  <div id="mobile-controls">
-
-    <button
-      id="leftBtn"
-      class="control-btn"
-    >
-      ◀
-    </button>
+      <div
+        class="platform"
+        style="
+          left: 0%;
+          top: 87.5%;
+          width: 100%;
+        "
+      ></div>
 
 
-    <button
-      id="jumpBtn"
-      class="control-btn jump-btn"
-    >
-      ▲
-    </button>
+      <!-- PLATAFORMA 1 -->
+
+      <div
+        class="platform"
+        style="
+          left: 37.5%;
+          top: 62.5%;
+          width: 25%;
+        "
+      ></div>
 
 
-    <button
-      id="rightBtn"
-      class="control-btn"
-    >
-      ▶
-    </button>
+      <!-- PLATAFORMA 2 -->
 
-  </div>
+      <div
+        class="platform"
+        style="
+          left: 68.75%;
+          top: 45%;
+          width: 18.75%;
+        "
+      ></div>
 
 
-  <!-- ======================================
-      PREGUNTA
-  ====================================== -->
+      <!-- PLATAFORMA 3 -->
+
+      <div
+        class="platform"
+        style="
+          left: 12.5%;
+          top: 37.5%;
+          width: 15%;
+        "
+      ></div>
+
+
+    </div>
+
+
+    <!-- ================================================
+         CONTROLES
+    ================================================= -->
+
+    <div id="mobile-controls">
+
+
+      <button
+        id="leftBtn"
+        class="control-btn"
+      >
+
+        ◀
+
+      </button>
+
+
+      <button
+        id="jumpBtn"
+        class="control-btn jump-btn"
+      >
+
+        🔼
+
+      </button>
+
+
+      <button
+        id="rightBtn"
+        class="control-btn"
+      >
+
+        ▶
+
+      </button>
+
+
+    </div>
+
+
+  </section>
+
+
+  <!-- ==================================================
+       PANTALLA 3: RESULTADOS
+  =================================================== -->
+
+  <section
+    id="endScreen"
+    class="end-screen"
+  >
+
+
+    <div class="end-card">
+
+
+      <div class="trophy">
+
+        🏆
+
+      </div>
+
+
+      <h1>
+
+        ¡Juego terminado!
+
+      </h1>
+
+
+      <p class="end-message">
+
+        ¡Buen trabajo!
+
+      </p>
+
+
+      <div class="final-results">
+
+
+        <p>
+
+          👤 Participante:
+
+          <strong id="finalPlayerName">
+            Jugador
+          </strong>
+
+        </p>
+
+
+        <p>
+
+          ⭐ Puntuación final:
+
+          <strong id="finalScore">
+            0
+          </strong>
+
+        </p>
+
+
+      </div>
+
+
+      <button
+        id="restartBtn"
+        class="start-btn"
+      >
+
+        🔄 JUGAR NUEVAMENTE
+
+      </button>
+
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       VENTANA DE PREGUNTAS
+  =================================================== -->
 
   <div
     id="questionBox"
     class="question-box"
   >
 
-    <h2 id="questionText">
-      Pregunta
-    </h2>
+
+    <div class="question-card">
 
 
-    <input
-      type="text"
-      id="answerInput"
-      placeholder="Escribe tu respuesta"
-      autocomplete="off"
-    >
+      <h2>
+
+        🧠 ¡Pregunta!
+
+      </h2>
 
 
-    <button id="answerBtn">
-      Responder
-    </button>
+      <p id="questionText">
+
+        Pregunta
+
+      </p>
+
+
+      <input
+        type="text"
+        id="answerInput"
+        placeholder="Escribe tu respuesta"
+        autocomplete="off"
+      >
+
+
+      <button id="answerBtn">
+
+        Responder
+
+      </button>
+
+
+    </div>
+
 
   </div>
 
 
+  <!-- JAVASCRIPT -->
+
   <script src="script.js"></script>
+
 
 </body>
 
