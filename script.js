@@ -189,6 +189,61 @@ let coin = null;
 
 
 // ==================================================
+// PICOS / TRAMPAS
+// ==================================================
+
+// Lista de picos colocados sobre las plataformas
+const spikesData = [
+  { x: 385, y: 223, width: 30, height: 20 }, // Pico centrado en la plataforma 1 (centro) 🎯
+  { x: 610, y: 155, width: 30, height: 20 }  // Pico centrado en la plataforma 2 (derecha) ➡️
+];
+
+let spikeElements = [];
+
+function createSpikes() {
+  // Limpiar picos antiguos si existen
+  spikeElements.forEach(spike => spike.remove());
+  spikeElements = [];
+
+  spikesData.forEach(data => {
+    const spike = document.createElement("div");
+    spike.classList.add("spike");
+    spike.dataset.x = data.x;
+    spike.dataset.y = data.y;
+    spike.dataset.w = data.width;
+    spike.dataset.h = data.height;
+
+    game.appendChild(spike);
+    spikeElements.push(spike);
+  });
+
+  updateSpikes();
+}
+
+function updateSpikes() {
+  const scale = getScale();
+
+  spikeElements.forEach(spike => {
+    const sX = parseFloat(spike.dataset.x);
+    const sY = parseFloat(spike.dataset.y);
+    const sW = parseFloat(spike.dataset.w);
+    const sH = parseFloat(spike.dataset.h);
+
+    spike.style.left = (sX * scale) + "px";
+    spike.style.top = (sY * scale) + "px";
+    spike.style.width = (sW * scale) + "px";
+    spike.style.height = (sH * scale) + "px";
+  });
+}
+
+
+
+
+
+
+
+
+// ==================================================
 // PUNTUACIÓN
 // ==================================================
 
@@ -206,9 +261,22 @@ let currentPlayerName = "";
 // CRONÓMETRO
 // ==================================================
 
-let timeLeft = 10 * 60;
+let timeLeft = 1 * 60;
 
 let timerInterval = null;
+
+
+//===================================================
+// Vidas
+// ==================================================
+
+let lives = 4;
+
+let isInvulnerable = false;
+
+// game over //
+
+let isGameOver = true; // 👈 ¡AQUÍ MISMO LA AGREGAS!
 
 
 // ==================================================
@@ -285,98 +353,54 @@ playerNameInput.addEventListener(
 );
 
 
+// ==================================================
+// COMENZAR JUEGO
+// ==================================================
+
 function startGame() {
+  const name = playerNameInput.value.trim();
 
-
-  // Obtener nombre
-
-  const name =
-
-    playerNameInput.value
-      .trim();
-
-
-  // Validar nombre
-
-  if (
-    name === ""
-  ) {
-
-    nameError.style.display =
-      "block";
-
+  if (name === "") {
+    nameError.style.display = "block";
     playerNameInput.focus();
-
     return;
-
   }
 
+  currentPlayerName = name;
+  playerDisplay.textContent = "👤 " + currentPlayerName;
 
-  // Guardar nombre
+  // Ocultar inicio y pantalla final, mostrar juego 🖼️
+  startScreen.style.display = "none";
+  endScreen.style.display = "none"; // 👈 Asegura que la pantalla final esté oculta
+  gameScreen.style.display = "flex";
 
-  currentPlayerName =
-    name;
+  // Reiniciar estado y variables del juego 🔄
+  isGameOver = false; // 👈 Habilita el bucle gameLoop
+  lives = 4; // 👈 Reinicia las vidas a 4
+  updateLivesDisplay(); // 👈 Muestra ❤️4 en pantalla
+  createSpikes();
 
-
-  // Mostrar nombre
-
-  playerDisplay.textContent =
-
-    "👤 " +
-    currentPlayerName;
-
-
-  // Ocultar inicio
-
-  startScreen.style.display =
-    "none";
-
-
-  // Mostrar juego
-
-  gameScreen.style.display =
-    "block";
-
-
-  // Reiniciar variables
-
+  // Reiniciar puntuación y posición
   score = 0;
-
-  scoreDisplay.textContent =
-    "⭐ Puntos: 0";
-
+  scoreDisplay.textContent = "⭐ Puntos: 0";
 
   x = 100;
-
   y = 100;
-
   velocityY = 0;
-
   jumping = true;
 
-
   // Reiniciar tiempo
-
-  timeLeft =
-    10 * 60;
-
-
+  timeLeft = 1 * 60;
   updateTimerDisplay();
-
-
-  // Iniciar cronómetro
-
   startTimer();
 
-
   // Crear moneda
-
   if (!coin) {
-
     spawnCoin();
-
   }
 
+  // Iniciar el bucle de animación 🏃‍♂️
+  gameLoop();
 }
 
 
@@ -470,6 +494,9 @@ function updateTimerDisplay() {
 // ==================================================
 
 function endGame() {
+
+
+  isGameOver = true; // 🚩 Le avisa al juego que debe detenerse
 
 
   // Detener cronómetro
@@ -1089,7 +1116,7 @@ function getPlatformData(
         top /
         100
       ) *
-      WORLD_HEIGHT,
+      WORLD_HEIGHT - 5,
 
 
     width:
@@ -1134,7 +1161,7 @@ function checkPlatformCollisions(
 
 
       const pTop =
-        data.top;
+        data.top; // aqui se añadio un 6 para ajustar el personaje en pantalla //
 
 
       const pWidth =
@@ -1212,132 +1239,59 @@ function checkPlatformCollisions(
 // ==================================================
 
 function gameLoop() {
+  // 1. Si el juego terminó, se detiene de inmediato 🛑
+  if (isGameOver) return;
 
-
-  const previousY =
-    y;
-
+  const previousY = y;
 
   // MOVIMIENTO
-
-  if (
-    keys.left
-  ) {
-
+  if (keys.left) {
     x -= speed;
-
   }
 
-
-  if (
-    keys.right
-  ) {
-
+  if (keys.right) {
     x += speed;
-
   }
-
 
   // LÍMITES
-
-  if (
-    x < 0
-  ) {
-
+  if (x < 0) {
     x = 0;
-
   }
 
-
-  if (
-    x >
-    WORLD_WIDTH -
-    PLAYER_WIDTH
-  ) {
-
-    x =
-
-      WORLD_WIDTH -
-      PLAYER_WIDTH;
-
+  if (x > WORLD_WIDTH - PLAYER_WIDTH) {
+    x = WORLD_WIDTH - PLAYER_WIDTH;
   }
-
 
   // GRAVEDAD
-
-  velocityY +=
-    gravity;
-
-
-  y +=
-    velocityY;
-
+  velocityY += gravity;
+  y += velocityY;
 
   // PLATAFORMAS
-
-  let onPlatform =
-
-    checkPlatformCollisions(
-      previousY
-    );
-
+  let onPlatform = checkPlatformCollisions(previousY);
 
   // SUELO
+  const groundY = 338 - PLAYER_HEIGHT;
 
-  const groundY =
-
-    WORLD_HEIGHT -
-    PLAYER_HEIGHT;
-
-
-  if (
-    y >= groundY
-  ) {
-
-
-    y =
-      groundY;
-
-
-    velocityY =
-      0;
-
-
-    jumping =
-      false;
-
-
-    onPlatform =
-      true;
-
+  if (y >= groundY) {
+    y = groundY;
+    velocityY = 0;
+    jumping = false;
+    onPlatform = true;
   }
-
 
   // ESTADO DE SALTO
-
-  if (
-    !onPlatform
-  ) {
-
-    jumping =
-      true;
-
+  if (!onPlatform) {
+    jumping = true;
   }
 
-
-  // DIBUJAR
-
+  // DIBUJAR Y COLISIONES
   drawPlayer();
-
   updateCoin();
-
   checkCoinCollision();
+  checkSpikeCollisions(); // 💥 Revisa colisiones con los picos
 
-
-  requestAnimationFrame(
-    gameLoop
-  );
-
+  // Siguiente cuadro de animación 🔄
+  requestAnimationFrame(gameLoop);
 }
 
 
@@ -1353,6 +1307,8 @@ window.addEventListener(
 
     updateCoin();
 
+    updateSpikes(); // <--- ¡AQUÍ AGREGAS ESTA LÍNEA! 
+
   }
 );
 
@@ -1362,3 +1318,46 @@ window.addEventListener(
 // ==================================================
 
 gameLoop();
+
+
+function checkSpikeCollisions() {
+  const spikes = document.querySelectorAll('.spike');
+
+  spikes.forEach(spike => {
+    const spikeLeft = parseFloat(spike.style.left);
+    const spikeTop = parseFloat(spike.style.top);
+    const spikeWidth = parseFloat(spike.style.width) || 30;
+    const spikeHeight = parseFloat(spike.style.height) || 30;
+
+    if (
+      x < spikeLeft + spikeWidth &&
+      x + PLAYER_WIDTH > spikeLeft &&
+      y < spikeTop + spikeHeight &&
+      y + PLAYER_HEIGHT > spikeTop
+    ) {
+      lives--; // 1. Resta una vida ❤️
+      
+      updateLivesDisplay(); // 👈 2. Actualiza la pantalla
+
+      if (lives <= 0) {
+        endGame(); // 3. Si llega a 0, termina el juego 🏁
+      } else {
+        // Regresa al jugador al inicio tras el golpe 🏃‍♂️
+        x = 50; 
+        y = 200;
+      }
+    }
+  });
+}
+
+// Función para actualizar los corazones en el HTML 🖥️
+function updateLivesDisplay() {
+  const livesSpan = document.getElementById('lives-count');
+  if (livesSpan) {
+    livesSpan.textContent = `❤️${lives}`;
+  }
+}
+
+
+
+

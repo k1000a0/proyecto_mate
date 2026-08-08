@@ -487,6 +487,8 @@ body {
     2px solid
     #1d5a38;
 
+    box-sizing: border-box; /* linea mueva ´para evitar estar dentro de la plataforma */
+
 }
 
 
@@ -874,4 +876,65 @@ body {
 
   }
 
+}
+
+
+/* ==================================================================
+Estilos de la interfaz / hud (vidas, puntos )
+==================================================================== */
+
+.lives {
+
+font-size: 18px;
+font-weight: bold;
+
+}
+
+
+
+/* Permite que la pantalla de inicio se pueda deslizar si es más alta que la pantalla */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  touch-action: manipulation;
+}
+
+/* Permitir scroll solo en la pantalla de inicio */
+#startScreen {
+  overflow-y: auto;
+}
+
+/* Pantalla principal del juego centrada y fija */
+#gameScreen {
+  width: 100vw;
+  height: 100vh;
+  display: none; /* <--- Agrega o verifica que diga "none" */
+  /* ... tus otros estilos ... */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 5px;
+  overflow: hidden; /* Mantiene la pantalla de juego fija sin scroll */
+}
+
+/* El cuadro del juego se adapta manteniendo su proporción */
+#game {
+  width: 100%;
+  max-width: 800px; /* Tamaño máximo original */
+  aspect-ratio: 800 / 400; /* Mantiene exactamente la proporción 2:1 del juego */
+  max-height: 70vh; /* Deja espacio para los botones y la barra superior */
+  position: relative;
+}
+
+
+/* Estilo para los picos */
+.spike {
+  position: absolute;
+  background-color: #ff3333; /* Color rojo trampa */
+  /* Creamos la forma de triángulo usando clip-path */
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  z-index: 5;
 }
