@@ -648,36 +648,31 @@ function drawPlayer() {
 
 
 // ==================================================
-// CONTROLES TÁCTILES
+// CONTROLES TÁCTILES (OPTIMIZADOS PARA MÓVIL)
 // ==================================================
 
-// Función auxiliar para registrar eventos táctiles limpios
-function setupTouchButton(button, onStart, onEnd) {
-  if (!button) return;
+function bindControl(element, onPress, onRelease) {
+  if (!element) return;
 
-  // Al presionar el botón en la pantalla táctil
-  button.addEventListener("touchstart", (e) => {
-    e.preventDefault(); // 🛑 Detiene menús contextuales y selección de texto
-    onStart();
-  }, { passive: false });
-
-  // Al levantar el dedo del botón
-  button.addEventListener("touchend", (e) => {
+  const handleStart = (e) => {
     e.preventDefault();
-    onEnd();
-  }, { passive: false });
+    onPress();
+  };
 
-  // Si el toque se interrumpe o el dedo sale del botón
-  button.addEventListener("touchcancel", (e) => {
+  const handleEnd = (e) => {
     e.preventDefault();
-    onEnd();
-  }, { passive: false });
+    if (onRelease) onRelease();
+  };
+
+  element.addEventListener("pointerdown", handleStart, { passive: false });
+  element.addEventListener("pointerup", handleEnd, { passive: false });
+  element.addEventListener("pointerleave", handleEnd, { passive: false });
+  element.addEventListener("pointercancel", handleEnd, { passive: false });
 }
 
-// Configuración de los tres botones principales
-setupTouchButton(leftBtn, () => { keys.left = true; }, () => { keys.left = false; });
-setupTouchButton(rightBtn, () => { keys.right = true; }, () => { keys.right = false; });
-setupTouchButton(jumpBtn, () => { jump(); }, () => {});
+bindControl(leftBtn, () => keys.left = true, () => keys.left = false);
+bindControl(rightBtn, () => keys.right = true, () => keys.right = false);
+bindControl(jumpBtn, () => jump(), null);
 
 
 // ==================================================
@@ -1230,42 +1225,43 @@ window.addEventListener(
 gameLoop();
 
 
+// ==================================================
+// DETECCIÓN DE COLISIÓN CON PICOS (CORREGIDA)
+// ==================================================
+
 function checkSpikeCollisions() {
-  const spikes = document.querySelectorAll('.spike');
+  if (isInvulnerable) return; // Si está invulnerable temporalmente, ignora
 
-  spikes.forEach(spike => {
-    const spikeLeft = parseFloat(spike.style.left);
-    const spikeTop = parseFloat(spike.style.top);
-    const spikeWidth = parseFloat(spike.style.width) || 30;
-    const spikeHeight = parseFloat(spike.style.height) || 30;
+  spikeElements.forEach(spike => {
+    const sX = parseFloat(spike.dataset.x);
+    const sY = parseFloat(spike.dataset.y);
+    const sW = parseFloat(spike.dataset.w) || 30;
+    const sH = parseFloat(spike.dataset.h) || 20;
 
+    // Colisión usando coordenadas lógicas del mundo
     if (
-      x < spikeLeft + spikeWidth &&
-      x + PLAYER_WIDTH > spikeLeft &&
-      y < spikeTop + spikeHeight &&
-      y + PLAYER_HEIGHT > spikeTop
+      x < sX + sW &&
+      x + PLAYER_WIDTH > sX &&
+      y < sY + sH &&
+      y + PLAYER_HEIGHT > sY
     ) {
-      lives--; // 1. Resta una vida ❤️
-      
-      updateLivesDisplay(); // 👈 2. Actualiza la pantalla
+      lives--; // Resta vida
+      updateLivesDisplay();
+
+      // Tiempo de invulnerabilidad breve para evitar perder todas las vidas de golpe
+      isInvulnerable = true;
+      setTimeout(() => { isInvulnerable = false; }, 1000);
 
       if (lives <= 0) {
-        endGame(); // 3. Si llega a 0, termina el juego 🏁
+        endGame();
       } else {
-        // Regresa al jugador al inicio tras el golpe 🏃‍♂️
-        x = 50; 
-        y = 200;
+        // Reiniciar posición inicial tras tocar pico
+        x = 100; 
+        y = 100;
+        velocityY = 0;
       }
     }
   });
-}
-
-// Función para actualizar los corazones en el HTML 🖥️
-function updateLivesDisplay() {
-  const livesSpan = document.getElementById('lives-count');
-  if (livesSpan) {
-    livesSpan.textContent = `❤️${lives}`;
-  }
 }
 
 
