@@ -670,6 +670,20 @@ function bindControl(element, onPress, onRelease) {
   element.addEventListener("pointercancel", handleEnd, { passive: false });
 }
 
+
+function jump() {
+
+  // Solo puede saltar si está tocando el suelo o una plataforma
+  if (!jumping && !isGameOver) {
+
+    velocityY = -10;
+
+    jumping = true;
+
+  }
+
+}
+
 bindControl(leftBtn, () => keys.left = true, () => keys.left = false);
 bindControl(rightBtn, () => keys.right = true, () => keys.right = false);
 bindControl(jumpBtn, () => jump(), null);
