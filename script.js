@@ -163,7 +163,7 @@ let velocityY = 0;
 
 const gravity = 0.5;
 
-const speed = 5;
+const speed = 3.5;
 
 let jumping = true;
 
@@ -384,8 +384,8 @@ function startGame() {
   score = 0;
   scoreDisplay.textContent = "⭐ Puntos: 0";
 
-  x = 100;
-  y = 100;
+  x = 140;
+  y = 105;
   velocityY = 0;
   jumping = true;
 
@@ -676,7 +676,7 @@ function jump() {
   // Solo puede saltar si está tocando el suelo o una plataforma
   if (!jumping && !isGameOver) {
 
-    velocityY = -10;
+    velocityY = -11.5;
 
     jumping = true;
 
@@ -1240,33 +1240,62 @@ gameLoop();
 
 
 function checkSpikeCollisions() {
-  const spikes = document.querySelectorAll('.spike');
 
-  spikes.forEach(spike => {
-    const spikeLeft = parseFloat(spike.style.left);
-    const spikeTop = parseFloat(spike.style.top);
-    const spikeWidth = parseFloat(spike.style.width) || 30;
-    const spikeHeight = parseFloat(spike.style.height) || 30;
+  // No comprobar daño si el jugador está temporalmente protegido
+  if (isInvulnerable || isGameOver) {
+    return;
+  }
 
-    if (
+  spikeElements.forEach(spike => {
+
+    // Usamos las coordenadas REALES del mundo 800x400,
+    // no las coordenadas visuales escaladas del teléfono.
+    const spikeLeft = parseFloat(spike.dataset.x);
+    const spikeTop = parseFloat(spike.dataset.y);
+    const spikeWidth = parseFloat(spike.dataset.w);
+    const spikeHeight = parseFloat(spike.dataset.h);
+
+    const touchingSpike =
       x < spikeLeft + spikeWidth &&
       x + PLAYER_WIDTH > spikeLeft &&
       y < spikeTop + spikeHeight &&
-      y + PLAYER_HEIGHT > spikeTop
-    ) {
-      lives--; // 1. Resta una vida ❤️
-      
-      updateLivesDisplay(); // 👈 2. Actualiza la pantalla
+      y + PLAYER_HEIGHT > spikeTop;
+
+    if (touchingSpike) {
+
+      lives--;
+
+      updateLivesDisplay();
+
+      // Protección temporal para evitar perder
+      // varias vidas en un solo contacto.
+      isInvulnerable = true;
 
       if (lives <= 0) {
-        endGame(); // 3. Si llega a 0, termina el juego 🏁
-      } else {
-        // Regresa al jugador al inicio tras el golpe 🏃‍♂️
-        x = 50; 
-        y = 200;
+
+        endGame();
+        return;
+
       }
+
+      // Regresar a una posición segura.
+      x = 140;
+      y = 105;
+
+      velocityY = 0;
+      jumping = true;
+
+      keys.left = false;
+      keys.right = false;
+
+      setTimeout(() => {
+        isInvulnerable = false;
+      }, 1000);
+
     }
+
   });
+
 }
 
 // Función para actualizar los corazones en el HTML 🖥️
