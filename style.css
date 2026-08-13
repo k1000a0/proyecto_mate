@@ -892,7 +892,9 @@ font-weight: bold;
 
 
 
-/* Permite que la pantalla de inicio se pueda deslizar si es más alta que la pantalla */
+/* ========================
+Permite que la pantalla de inicio se pueda deslizar si es más alta que la pantalla */
+===========================
 html, body {
   margin: 0;
   padding: 0;
@@ -937,4 +939,23 @@ html, body {
   /* Creamos la forma de triángulo usando clip-path */
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   z-index: 5;
+}
+
+
+/* ==================================================================
+   PASO 1: BLOQUEO DE SELECCIÓN DE TEXTO Y MENÚS FLOTANTES EN MÓVIL
+==================================================================== */
+body, button, .control-btn, #game, #mobile-controls {
+  -webkit-touch-callout: none; /* Desactiva el menú contextual de Android/iOS */
+  -webkit-user-select: none;   /* Safari */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE / Edge */
+  user-select: none;           /* Evita la selección azul de texto */
+  touch-action: manipulation;  /* Evita el zoom por doble toque rápido */
+}
+
+/* Permite ingresar texto normalmente en las cajas de nombre y respuesta */
+input {
+  -webkit-user-select: auto;
+  user-select: auto;
 }

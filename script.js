@@ -651,123 +651,33 @@ function drawPlayer() {
 // CONTROLES TÁCTILES
 // ==================================================
 
+// Función auxiliar para registrar eventos táctiles limpios
+function setupTouchButton(button, onStart, onEnd) {
+  if (!button) return;
 
-// IZQUIERDA
+  // Al presionar el botón en la pantalla táctil
+  button.addEventListener("touchstart", (e) => {
+    e.preventDefault(); // 🛑 Detiene menús contextuales y selección de texto
+    onStart();
+  }, { passive: false });
 
-leftBtn.addEventListener(
-  "pointerdown",
-  (e) => {
-
+  // Al levantar el dedo del botón
+  button.addEventListener("touchend", (e) => {
     e.preventDefault();
+    onEnd();
+  }, { passive: false });
 
-    keys.left = true;
-
-  }
-);
-
-
-leftBtn.addEventListener(
-  "pointerup",
-  () => {
-
-    keys.left = false;
-
-  }
-);
-
-
-leftBtn.addEventListener(
-  "pointerleave",
-  () => {
-
-    keys.left = false;
-
-  }
-);
-
-
-leftBtn.addEventListener(
-  "pointercancel",
-  () => {
-
-    keys.left = false;
-
-  }
-);
-
-
-// DERECHA
-
-rightBtn.addEventListener(
-  "pointerdown",
-  (e) => {
-
+  // Si el toque se interrumpe o el dedo sale del botón
+  button.addEventListener("touchcancel", (e) => {
     e.preventDefault();
-
-    keys.right = true;
-
-  }
-);
-
-
-rightBtn.addEventListener(
-  "pointerup",
-  () => {
-
-    keys.right = false;
-
-  }
-);
-
-
-rightBtn.addEventListener(
-  "pointerleave",
-  () => {
-
-    keys.right = false;
-
-  }
-);
-
-
-rightBtn.addEventListener(
-  "pointercancel",
-  () => {
-
-    keys.right = false;
-
-  }
-);
-
-
-// SALTAR
-
-jumpBtn.addEventListener(
-  "pointerdown",
-  (e) => {
-
-    e.preventDefault();
-
-    jump();
-
-  }
-);
-
-
-function jump() {
-
-
-  if (
-    !jumping
-  ) {
-
-    velocityY = -13;
-
-    jumping = true;
-
-  }
-
+    onEnd();
+  }, { passive: false });
 }
+
+// Configuración de los tres botones principales
+setupTouchButton(leftBtn, () => { keys.left = true; }, () => { keys.left = false; });
+setupTouchButton(rightBtn, () => { keys.right = true; }, () => { keys.right = false; });
+setupTouchButton(jumpBtn, () => { jump(); }, () => {});
 
 
 // ==================================================
