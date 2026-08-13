@@ -376,9 +376,15 @@ function startGame() {
 
   // Reiniciar estado y variables del juego 🔄
   isGameOver = false; // 👈 Habilita el bucle gameLoop
+
   lives = 4; // 👈 Reinicia las vidas a 4
+
+  isInvulnerable = false;
+
   updateLivesDisplay(); // 👈 Muestra ❤️4 en pantalla
+
   createSpikes();
+  
 
   // Reiniciar puntuación y posición
   score = 0;
@@ -1273,7 +1279,10 @@ function checkSpikeCollisions() {
 
       if (lives <= 0) {
 
+        isInvulnerable = false;
+
         endGame();
+        
         return;
 
       }
