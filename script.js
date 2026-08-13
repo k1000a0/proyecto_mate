@@ -1225,43 +1225,42 @@ window.addEventListener(
 gameLoop();
 
 
-// ==================================================
-// DETECCIÓN DE COLISIÓN CON PICOS (CORREGIDA)
-// ==================================================
-
 function checkSpikeCollisions() {
-  if (isInvulnerable) return; // Si está invulnerable temporalmente, ignora
+  const spikes = document.querySelectorAll('.spike');
 
-  spikeElements.forEach(spike => {
-    const sX = parseFloat(spike.dataset.x);
-    const sY = parseFloat(spike.dataset.y);
-    const sW = parseFloat(spike.dataset.w) || 30;
-    const sH = parseFloat(spike.dataset.h) || 20;
+  spikes.forEach(spike => {
+    const spikeLeft = parseFloat(spike.style.left);
+    const spikeTop = parseFloat(spike.style.top);
+    const spikeWidth = parseFloat(spike.style.width) || 30;
+    const spikeHeight = parseFloat(spike.style.height) || 30;
 
-    // Colisión usando coordenadas lógicas del mundo
     if (
-      x < sX + sW &&
-      x + PLAYER_WIDTH > sX &&
-      y < sY + sH &&
-      y + PLAYER_HEIGHT > sY
+      x < spikeLeft + spikeWidth &&
+      x + PLAYER_WIDTH > spikeLeft &&
+      y < spikeTop + spikeHeight &&
+      y + PLAYER_HEIGHT > spikeTop
     ) {
-      lives--; // Resta vida
-      updateLivesDisplay();
-
-      // Tiempo de invulnerabilidad breve para evitar perder todas las vidas de golpe
-      isInvulnerable = true;
-      setTimeout(() => { isInvulnerable = false; }, 1000);
+      lives--; // 1. Resta una vida ❤️
+      
+      updateLivesDisplay(); // 👈 2. Actualiza la pantalla
 
       if (lives <= 0) {
-        endGame();
+        endGame(); // 3. Si llega a 0, termina el juego 🏁
       } else {
-        // Reiniciar posición inicial tras tocar pico
-        x = 100; 
-        y = 100;
-        velocityY = 0;
+        // Regresa al jugador al inicio tras el golpe 🏃‍♂️
+        x = 50; 
+        y = 200;
       }
     }
   });
+}
+
+// Función para actualizar los corazones en el HTML 🖥️
+function updateLivesDisplay() {
+  const livesSpan = document.getElementById('lives-count');
+  if (livesSpan) {
+    livesSpan.textContent = `❤️${lives}`;
+  }
 }
 
 
