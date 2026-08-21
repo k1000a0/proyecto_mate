@@ -261,7 +261,7 @@ let currentPlayerName = "";
 // CRONÓMETRO
 // ==================================================
 
-let timeLeft = 1 * 60;
+let timeLeft = 10 * 60;
 
 let timerInterval = null;
 
@@ -396,7 +396,7 @@ function startGame() {
   jumping = true;
 
   // Reiniciar tiempo
-  timeLeft = 1 * 60;
+  timeLeft = 10 * 60;
   updateTimerDisplay();
   startTimer();
 
