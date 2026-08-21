@@ -196,6 +196,9 @@ let coin = null;
 const spikesData = [
   { x: 385, y: 223, width: 30, height: 20 }, // Pico centrado en la plataforma 1 (centro) 🎯
   { x: 610, y: 155, width: 30, height: 20 }  // Pico centrado en la plataforma 2 (derecha) ➡️
+
+   { x: 520, y: 330, width: 30, height: 20 }, //nuevos picos de prueba//
+   { x: 710, y: 330, width: 30, height: 20 }
 ];
 
 let spikeElements = [];
@@ -261,7 +264,7 @@ let currentPlayerName = "";
 // CRONÓMETRO
 // ==================================================
 
-let timeLeft = 1 * 60;
+let timeLeft = 10 * 60;
 
 let timerInterval = null;
 
@@ -396,7 +399,7 @@ function startGame() {
   jumping = true;
 
   // Reiniciar tiempo
-  timeLeft = 1 * 60;
+  timeLeft = 10 * 60;
   updateTimerDisplay();
   startTimer();
 
