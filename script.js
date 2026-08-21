@@ -195,7 +195,7 @@ let coin = null;
 // Lista de picos colocados sobre las plataformas
 const spikesData = [
   { x: 385, y: 223, width: 30, height: 20 }, // Pico centrado en la plataforma 1 (centro) 🎯
-  { x: 610, y: 155, width: 30, height: 20 }, // Pico centrado en la plataforma 2 (derecha) ➡️
+  { x: 610, y: 155, width: 30, height: 20 } // Pico centrado en la plataforma 2 (derecha) ➡️
 ];
 
 let spikeElements = [];
