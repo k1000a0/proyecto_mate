@@ -197,8 +197,8 @@ const spikesData = [
  { x: 385, y: 223, width: 30, height: 20 }, //Platform left//
   { x: 610, y: 155, width: 30, height: 20 }, //platform right//
 
-  { x: 145, y: 330, width: 30, height: 20 },
-  { x: 610, y: 330, width: 30, height: 20 }
+  { x: 145, y: 315, width: 30, height: 20 },
+  { x: 610, y: 315, width: 30, height: 20 }
 ];
 
 let spikeElements = [];
