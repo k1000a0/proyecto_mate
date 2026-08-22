@@ -290,44 +290,66 @@ const questions = [
 
   {
     question:
-      "¿Cuánto es 5 + 3?",
+      "1. En la teoría de grafos y estructuras de datos, ¿cómo se le denomina específicamente a un nodo que no tiene ningún nodo hijo y se encuentra al final de las ramificaciones?\n\n" +
+      "A) Nodo raíz\n" +
+      "B) Nodo interno\n" +
+      "C) Nodo hoja o externo\n" +
+      "D) Nodo padre",
 
-    answer:
-      "8"
-
+    answer: "c"
   },
-
 
   {
     question:
-      "¿Cuánto es 10 - 4?",
+      "2. ¿Cuál es la característica principal que define y limita estructuralmente a un árbol binario?\n\n" +
+      "A) Cada nodo puede tener un máximo de dos hijos, conocidos como izquierdo y derecho\n" +
+      "B) Cada nodo debe tener obligatoriamente tres hijos distribuidos de forma simétrica\n" +
+      "C) No existe ningún tipo de jerarquía ni nodos raíz diferenciados\n" +
+      "D) Todos los nodos del sistema están conectados formando ciclos cerrados",
 
-    answer:
-      "6"
-
+    answer: "a"
   },
-
 
   {
     question:
-      "¿Cuánto es 3 x 4?",
+      "3. ¿Cuáles son los tres métodos clásicos de recorrido en profundidad utilizados para visitar todos los nodos de un árbol binario?\n\n" +
+      "A) Lineal, logarítmico y exponencial\n" +
+      "B) Preorden, Inorden y Postorden\n" +
+      "C) Ascendente, descendente y aleatorio\n" +
+      "D) Anchura, profundidad y matriz de adyacencia",
 
-    answer:
-      "12"
-
+    answer: "b"
   },
-
 
   {
     question:
-      "¿Cuál es la capital de Costa Rica?",
+      "4. Si un árbol binario completo tiene un total de 83 vértices, ¿cuál es el número exacto de vértices terminales u hojas, aplicando la fórmula correspondiente donde V totales = 2k + 1 y V terminales = k + 1?\n\n" +
+      "A) 20 vértices\n" +
+      "B) 42 vértices\n" +
+      "C) 83 vértices\n" +
+      "D) 41 vértices",
 
-    answer:
-      "san jose"
+    answer: "b"
+  },
 
+  {
+    question:
+      "5. ¿Qué tipo de estructura de árbol se utiliza comúnmente en informática y toma de decisiones para representar bifurcaciones basadas en condiciones lógicas?\n\n" +
+      "A) Árbol de decisión\n" +
+      "B) Árbol libre sin nodos conectados\n" +
+      "C) Árbol de expansión mínima lineal\n" +
+      "D) Grafo Euleriano completo",
+
+    answer: "a"
   }
 
+
 ];
+
+
+
+// Contador de la pregunta actual
+let currentQuestionIndex = 0;
 
 
 // ==================================================
@@ -392,6 +414,8 @@ function startGame() {
   // Reiniciar puntuación y posición
   score = 0;
   scoreDisplay.textContent = "⭐ Puntos: 0";
+
+  currentQuestionIndex = 0;
 
   x = 140;
   y = 105;
@@ -868,24 +892,16 @@ function checkCoinCollision() {
     keys.right = false;
 
 
-    const randomQuestion =
-
-      questions[
-        Math.floor(
-          Math.random() *
-          questions.length
-        )
-      ];
+ const currentQuestion =
+    questions[currentQuestionIndex];
 
 
     questionText.textContent =
+  currentQuestion.question;
 
-      randomQuestion.question;
 
-
-    questionBox.dataset.answer =
-
-      randomQuestion.answer;
+   questionBox.dataset.answer =
+  currentQuestion.answer;
 
 
     answerInput.value = "";
