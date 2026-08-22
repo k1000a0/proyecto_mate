@@ -1000,14 +1000,25 @@ function answerQuestion() {
   }
 
 
-  questionBox.style.display =
-    "none";
+ questionBox.style.display = "none";
 
+// Pasar a la siguiente pregunta
+currentQuestionIndex++;
 
+// Si ya respondió todas las preguntas, terminar el juego
+if (currentQuestionIndex >= questions.length) {
+
+  endGame();
+
+} else {
+
+  // Si todavía quedan preguntas, crear otra moneda
   setTimeout(
     spawnCoin,
     300
   );
+
+}
 
 }
 
